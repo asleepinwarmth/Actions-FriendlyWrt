@@ -1,8 +1,12 @@
 name: Build FriendlyWrt
 
 on:
+  workflow_dispatch:
   watch:
     types: started
+
+permissions:
+  contents: write
 jobs:
   prepare_release:
     runs-on: ubuntu-22.04
@@ -11,7 +15,7 @@ jobs:
     - name: Get release tag
       id: release_tag
       run: |
-        release_tag="FriendlyWrt-$(date +%Y-%m-%d)"
+        release_tag="FriendlyWrt-custom-$(date +%Y-%m-%d-%H%M)"
         echo "release_tag=$release_tag" >> $GITHUB_OUTPUT
 
     - name: Create empty release
@@ -33,7 +37,7 @@ jobs:
     if: github.event.repository.owner.id == github.event.sender.id
     strategy:
       matrix:
-        VERSION: ['25.12', '24.10']
+        VERSION: ['25.12']
         SET: [docker, non-docker]
 
     steps:
@@ -188,9 +192,9 @@ jobs:
 
     strategy:
       matrix:
-        VERSION: ['25.12', '24.10']
-        CPU: [rk3328, rk3528, rk3399, rk3566, rk3568, rk3576, rk3588]
-        SET: [docker, non-docker]
+        VERSION: ['25.12']
+        CPU: [rk3588]
+        SET: [docker]
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -398,4 +402,3 @@ jobs:
             echo "Deleting asset: $asset"
             gh release delete-asset "$RELEASE_TAG" "$asset" --yes --repo "$GITHUB_REPOSITORY"
           done
-
