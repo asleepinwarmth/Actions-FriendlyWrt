@@ -122,6 +122,10 @@ jobs:
         cd project/friendlywrt
         make -j1 V=s
 
+    - name: Fix local APK feed signature
+      run: |
+        scripts/fix_apk_local_feed_signature.sh project
+
     - name: Create rootfs package
       id: create_rootfs_package
       run: |
