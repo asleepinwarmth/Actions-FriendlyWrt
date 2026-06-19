@@ -2,6 +2,9 @@ name: Build FriendlyWrt
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - master
   watch:
     types: started
 
